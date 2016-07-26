@@ -107,9 +107,12 @@ class OgRendererService implements \TYPO3\CMS\Core\SingletonInterface
 		$fileRelationTable = $GLOBALS['TSFE']->page['_PAGES_OVERLAY_UID'] ? 'pages_language_overlay' : 'pages';
 
         // Get image
-        /** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
+		$fileRelationPid = $GLOBALS['TSFE']->page['_PAGES_OVERLAY_UID'] ?: $GLOBALS['TSFE']->id;
+		$fileRelationTable = $GLOBALS['TSFE']->page['_PAGES_OVERLAY_UID'] ? 'pages_language_overlay' : 'pages';
+
+		/** @var \TYPO3\CMS\Core\Resource\FileRepository $fileRepository */
         $fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
-		$fileObjects = $fileRepository->findByRelation($fileRelationTable, 'tx_jhopengraphprotocol_ogfalimages', $fileRelationPid);
+        $fileObjects = $fileRepository->findByRelation($fileRelationTable, 'tx_jhopengraphprotocol_ogfalimages', $fileRelationPid);
         if (count($fileObjects)) {
             foreach ($fileObjects as $key => $fileObject) {
                 /** @var FileReference $fileObject */
@@ -130,7 +133,7 @@ class OgRendererService implements \TYPO3\CMS\Core\SingletonInterface
                 }
             }
         }
-        
+
         // Get url
         $og['url'] = htmlentities(GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'));
 
